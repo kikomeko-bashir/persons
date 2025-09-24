@@ -95,7 +95,7 @@ const styles = {
 
   contentContainer: {
     maxWidth: '1200px', // Maximum width for content
-    margin: '0 auto',  content
+    margin: '0 auto',
   },
 
   pageHeader: {
@@ -108,8 +108,8 @@ const styles = {
   },
 
   title: {
-    margin: 0,  margin
-    color: '#2c3e50', // Dark blue-gray color
+    margin: 0,
+    color: '#2c3e50',
     fontSize: '28px', // Large, readable font
     fontWeight: 'bold', // Bold text
   },
@@ -125,11 +125,11 @@ const styles = {
   },
 
   emptyState: {
-    textAlign: 'center' as const,  content
-    padding: '60px 20px', 
-    backgroundColor: 'white', 
-    borderRadius: '10px', 
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', 
+    textAlign: 'center' as const,
+    padding: '60px 20px',
+    backgroundColor: 'white',
+    borderRadius: '10px',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
   },
 
   emptyIcon: {
@@ -145,10 +145,10 @@ const styles = {
   },
 
   emptyText: {
-    fontSize: '16px',  size
-    color: '#7f8c8d', // Muted gray color
-    margin: '0 0 20px 0', // Space below text
-    lineHeight: '1.5',  spacing
+    fontSize: '16px',
+    color: '#7f8c8d',
+    margin: '0 0 20px 0',
+    lineHeight: '1.5',
   },
 
   emptyAction: {
@@ -177,7 +177,7 @@ const styles = {
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', 
     transition: 'transform 0.2s ease, box-shadow 0.2s ease', // Smooth hover effects
     border: '1px solid #e0e0e0', 
-    cursor: 'pointer',  on hover
+    cursor: 'pointer',
   },
 
   cardHeader: {
@@ -185,8 +185,8 @@ const styles = {
     justifyContent: 'space-between', // Space between name and age
     alignItems: 'center', // Center vertically
     marginBottom: '15px', // Space below header
-    paddingBottom: '10px',  border
-    borderBottom: '2px solid #ecf0f1',  separator
+    paddingBottom: '10px',
+    borderBottom: '2px solid #ecf0f1',
   },
 
   nameAndPhoto: {
@@ -199,12 +199,12 @@ const styles = {
     width: '50px', // Fixed width
     height: '50px', // Fixed height (square)
     borderRadius: '50%', // Make it circular
-    objectFit: 'cover' as const,  to fit
+    objectFit: 'cover' as const,
     border: '2px solid #e0e0e0', 
   },
 
   personName: {
-    margin: 0,  margin
+    margin: 0,
     fontSize: '20px', // Large, readable font
     color: '#2c3e50', // Dark blue-gray color
     fontWeight: 'bold', // Bold text
@@ -226,7 +226,7 @@ const styles = {
 
   infoRow: {
     display: 'flex', // Flexbox layout
-    flexDirection: 'column' as const,  above value
+    flexDirection: 'column' as const,
     gap: '4px', // Small gap between label and value
   },
 
@@ -238,7 +238,7 @@ const styles = {
   },
 
   infoValue: {
-    fontSize: '16px',  size
+    fontSize: '16px',
     color: '#2c3e50', // Dark blue-gray color
     wordBreak: 'break-word' as const, // Break long words if needed
   },

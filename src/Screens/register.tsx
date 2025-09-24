@@ -137,7 +137,7 @@ export const Register: React.FC<RegisterProps> = ({
             Already have an account?{' '}
             <button 
               style={styles.switchButton}
-              onClick={handleSwitchToLogin}
+              onClick={onSwitchToLogin}
             >
               Login here
             </button>

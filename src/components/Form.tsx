@@ -73,76 +73,60 @@ export const Form: React.FC<FormProps> = ({
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
     
-     against its validation rules
     fields.forEach(field => {
       const value = formData[field.name] || '';
       
-       field is empty
       if (field.required && !value.trim()) {
         newErrors[field.name] = `${field.label} is required`;
       }
       
-       for number fields
       if (field.type === 'number' && value) {
         const numValue = parseInt(value);
         
-         is a valid number
         if (isNaN(numValue)) {
           newErrors[field.name] = `${field.label} must be a valid number`;
         } 
-         value constraint
         else if (field.min !== undefined && numValue < field.min) {
           newErrors[field.name] = `${field.label} must be at least ${field.min}`;
         } 
-         value constraint
         else if (field.max !== undefined && numValue > field.max) {
           newErrors[field.name] = `${field.label} must be at most ${field.max}`;
         }
       }
       
-       validation
-      if ('needsConfirmation' in field && field.needsConfirmation && field.confirmAgainst) {
-        const confirmValue = formData[field.confirmAgainst] || '';
+      if ('needsConfirmation' in field && field.needsConfirmation && 'confirmAgainst' in field && field.confirmAgainst) {
+        const confirmValue = formData[field.confirmAgainst as string] || '';
         if (value !== confirmValue) {
-          newErrors[field.name] = field.customValidationMessage || 'Passwords must match';
+          newErrors[field.name] = ('customValidationMessage' in field && field.customValidationMessage) ? field.customValidationMessage as string : 'Passwords must match';
         }
       }
     });
     
-     state with new validation results
     setErrors(newErrors);
-    
-     if no errors found (form is valid)
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault(); // Prevent page refresh
+    e.preventDefault();
     
-     if validation passes
     if (validateForm()) {
-      onSubmit(formData); 's submit handler with form data
+      onSubmit(formData);
     }
   };
 
   const formContent = (
     <>
-      {}
       <h2 style={styles.title}>{title}</h2>
       
-      {}
       <form onSubmit={handleSubmit} style={styles.form}>
-        {}
         {fields.map((field) => (
           <div key={field.name} style={styles.inputGroup}>
-            {}
             <label style={styles.label}>
               {field.label}
               {field.required && <span style={styles.required}> *</span>}
             </label>
             
-            {}
-              <input
+            <input
                 type={field.type}
                 name={field.name}
                 value={field.type === 'file' ? '' : (formData[field.name] || '')} // File inputs don't use value
@@ -158,9 +142,9 @@ export const Form: React.FC<FormProps> = ({
                   e.target.style.boxShadow = 'none';
                 }}
                 style={{
-                  ...styles.input,  styles
-                  ...(field.type === 'file' ? styles.fileInput : {}), // Special file input styles
-                  ...(errors[field.name] ? styles.inputError : {})  styles
+                  ...styles.input,
+                  ...(field.type === 'file' ? styles.fileInput : {}),
+                  ...(errors[field.name] ? styles.inputError : {})
                 }}
                 placeholder={field.placeholder}
                 min={field.min} // For number inputs
@@ -169,7 +153,6 @@ export const Form: React.FC<FormProps> = ({
                 accept={field.accept} // For file inputs
               />
             
-            {}
             {field.type === 'file' && formData[field.name] && (
               <div style={styles.imagePreview}>
                 <img 
@@ -180,14 +163,12 @@ export const Form: React.FC<FormProps> = ({
               </div>
             )}
             
-            {}
             {errors[field.name] && (
               <span style={styles.errorText}>{errors[field.name]}</span>
             )}
           </div>
         ))}
 
-        {}
         <button type="submit" style={styles.submitButton}>
           {submitButtonText}
         </button>
@@ -215,68 +196,68 @@ export const Form: React.FC<FormProps> = ({
 const styles = {
   
   container: {
-    marginLeft: '300px',  fixed navbar (300px wide)
-    padding: '20px', // Internal spacing
-    minHeight: '100vh',  height
-    backgroundColor: '#f8f9fa', // Light gray background
+    marginLeft: '300px',
+    padding: '20px',
+    minHeight: '100vh',
+    backgroundColor: '#f8f9fa',
   },
 
   formContainer: {
-    maxWidth: '600px', // Limit form width for readability
-    margin: '0 auto', 
-    backgroundColor: 'white',  for form
-    padding: '40px',  spacing
-    borderRadius: '15px',  corners
-    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)', // Enhanced shadow
-    width: '100%', 
-    boxSizing: 'border-box' as const,  in width calculation
+    maxWidth: '600px',
+    margin: '0 auto',
+    backgroundColor: 'white',
+    padding: '40px',
+    borderRadius: '15px',
+    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
+    width: '100%',
+    boxSizing: 'border-box' as const,
   },
 
   title: {
-    textAlign: 'center' as const,  title
-    color: '#2c3e50', // Dark blue-gray color
-    marginBottom: '30px', // Space below title
-    fontSize: '28px', // Large, readable font
+    textAlign: 'center' as const,
+    color: '#2c3e50',
+    marginBottom: '30px',
+    fontSize: '28px',
   },
 
   form: {
-    display: 'flex', // Flexbox layout
-    flexDirection: 'column' as const,  vertically
-    gap: '28px',  between fields for better breathing room
+    display: 'flex',
+    flexDirection: 'column' as const,
+    gap: '28px',
   },
 
   inputGroup: {
-    display: 'flex', // Flexbox layout
-    flexDirection: 'column' as const,  above input
-    gap: '12px',  between label and input for better readability
+    display: 'flex',
+    flexDirection: 'column' as const,
+    gap: '12px',
   },
 
   label: {
-    fontSize: '16px',  size
-    fontWeight: '600',  for better hierarchy
-    color: '#2c3e50',  for better contrast
-    letterSpacing: '0.1px',  spacing
-    lineHeight: '1.4', 
+    fontSize: '16px',
+    fontWeight: '600',
+    color: '#2c3e50',
+    letterSpacing: '0.1px',
+    lineHeight: '1.4',
     fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-    marginBottom: '2px'  for better spacing
+    marginBottom: '2px',
   },
 
   required: {
-    color: '#e74c3c',  for required indicator
-    fontWeight: '700', 
-    marginLeft: '2px'  from label
+    color: '#e74c3c',
+    fontWeight: '700',
+    marginLeft: '2px',
   },
 
   input: {
-    padding: '18px',  spacing for better touch targets
-    border: '2px solid #e0e0e0', // Light gray border
-    borderRadius: '10px',  corners for modern look
-    fontSize: '16px',  size
-    transition: 'all 0.3s ease',  for all properties
-    outline: 'none',  focus outline
-    lineHeight: '1.5',  for readability
-    backgroundColor: '#fafbfc', 
-    boxSizing: 'border-box' as const,  in width calculation
+    padding: '18px',
+    border: '2px solid #e0e0e0',
+    borderRadius: '10px',
+    fontSize: '16px',
+    transition: 'all 0.3s ease',
+    outline: 'none',
+    lineHeight: '1.5',
+    backgroundColor: '#fafbfc',
+    boxSizing: 'border-box' as const,
     fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
     fontWeight: '400',
     letterSpacing: '0.1px',
@@ -284,61 +265,61 @@ const styles = {
   },
 
   fileInput: {
-    padding: '8px',  padding for file inputs
-    backgroundColor: '#f8f9fa', 
-    cursor: 'pointer',  for file selection
+    padding: '8px',
+    backgroundColor: '#f8f9fa',
+    cursor: 'pointer',
   },
 
   inputError: {
-    borderColor: '#e74c3c',  for errors
-    backgroundColor: '#fef2f2',  background for errors
+    borderColor: '#e74c3c',
+    backgroundColor: '#fef2f2',
   },
 
   inputFocus: {
-    borderColor: '#667eea',  on focus
-    backgroundColor: '#ffffff',  on focus
-    boxShadow: '0 0 0 3px rgba(102, 126, 234, 0.1)',  glow
+    borderColor: '#667eea',
+    backgroundColor: '#ffffff',
+    boxShadow: '0 0 0 3px rgba(102, 126, 234, 0.1)',
   },
 
   errorText: {
-    color: '#e74c3c',  for error text
-    fontSize: '14px',  for error messages
-    marginTop: '6px',  above error text
-    fontWeight: '500',  for better readability
-    letterSpacing: '0.1px',  spacing
-    lineHeight: '1.4', 
+    color: '#e74c3c',
+    fontSize: '14px',
+    marginTop: '6px',
+    fontWeight: '500',
+    letterSpacing: '0.1px',
+    lineHeight: '1.4',
     fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
   },
 
   imagePreview: {
-    marginTop: '10px',  preview
-    textAlign: 'center' as const,  preview
+    marginTop: '10px',
+    textAlign: 'center' as const,
   },
 
   previewImage: {
-    maxWidth: '200px',  size
-    maxHeight: '200px',  size
-    borderRadius: '8px', 
-    border: '2px solid #e0e0e0', 
-    objectFit: 'cover' as const,  to fit
+    maxWidth: '200px',
+    maxHeight: '200px',
+    borderRadius: '8px',
+    border: '2px solid #e0e0e0',
+    objectFit: 'cover' as const,
   },
 
   submitButton: {
-    padding: '18px 30px', // Increased padding for button
-    backgroundColor: '#3498db', 
-    color: 'white', 
-    border: 'none', 
-    borderRadius: '8px',  corners
-    fontSize: '18px', // Large, readable font
-    fontWeight: '600',  for better hierarchy
-    cursor: 'pointer', 
-    transition: 'all 0.3s ease',  for all properties
-    marginTop: '20px',  above button
-    width: '100%',  button
+    padding: '18px 30px',
+    backgroundColor: '#3498db',
+    color: 'white',
+    border: 'none',
+    borderRadius: '8px',
+    fontSize: '18px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
+    marginTop: '20px',
+    width: '100%',
     fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-    letterSpacing: '0.2px',  spacing
-    lineHeight: '1.4', 
-    textTransform: 'none' as const,  transformation
-    boxShadow: '0 2px 4px rgba(52, 152, 219, 0.2)' 
+    letterSpacing: '0.2px',
+    lineHeight: '1.4',
+    textTransform: 'none' as const,
+    boxShadow: '0 2px 4px rgba(52, 152, 219, 0.2)',
   },
 };

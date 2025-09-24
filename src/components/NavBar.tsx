@@ -81,7 +81,7 @@ const styles = {
     display: 'flex', // Flexbox layout
     flexDirection: 'column' as const, // Stack buttons vertically
     alignItems: 'center', // Center buttons horizontally
-    boxShadow: '2px 0 5px rgba(0,0,0,0.1)',  for depth
+    boxShadow: '2px 0 5px rgba(0,0,0,0.1)',
   },
 
   navItem: {
@@ -96,15 +96,15 @@ const styles = {
     color: '#ecf0f1', // Light gray text
     border: 'none', 
     borderRadius: '5px', 
-    cursor: 'pointer',  on hover
-    fontSize: '16px',  size
-    transition: 'all 0.3s ease',  for hover effects
+    cursor: 'pointer',
+    fontSize: '16px',
+    transition: 'all 0.3s ease',
     textAlign: 'left' as const, // Left-align text
   },
 
   activeButton: {
-    backgroundColor: '#3498db',  for active state
-    color: 'white',  for contrast
+    backgroundColor: '#3498db',
+    color: 'white',
   },
 
   userSection: {

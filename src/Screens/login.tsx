@@ -148,7 +148,7 @@ const styles = {
     boxSizing: 'border-box' as const
   },
   formContainer: {
-    maxWidth: '400px',
+    maxWidth: '550px',
     width: '100%',
     backgroundColor: 'white',
     padding: '40px',
