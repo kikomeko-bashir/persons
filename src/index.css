@@ -158,6 +158,18 @@ code {
 .response-area::placeholder {
   color: rgba(251, 240, 223, 0.4);
 }
+/* Fade in animation for messages */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (prefers-reduced-motion) {
   *,
   ::before,

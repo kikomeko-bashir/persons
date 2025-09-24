@@ -4,50 +4,17 @@ import type { AuthFormField } from '../types/AuthForm';
 import { useAuth } from '../contexts/AuthContext';
 import { Form } from '../components/Form';
 
-/**
- * Props interface for the Register component
- * Defines what data and functions the component needs
- */
 interface RegisterProps {
-  /** Callback function called when registration is successful */
+  
   onRegisterSuccess: (user: User) => void;
-  
-  /** Callback function called when user wants to switch to login */
+
   onSwitchToLogin: () => void;
-  
-  /** Callback function called when registration fails */
+
   onRegisterError?: (error: string) => void;
-  
-  /** Optional loading state from parent component */
+
   isLoading?: boolean;
 }
 
-/**
- * Register Component - Screen for user registration
- * 
- * This component provides a registration form with the following fields:
- * - Username (required, 3-20 characters, alphanumeric + underscores)
- * - Email (required, valid email format)
- * - Password (required, 8-50 characters)
- * - Confirm Password (required, must match password)
- * - Photo (optional, image upload)
- * 
- * Features:
- * - Form validation with real-time feedback
- * - Password confirmation matching
- * - Email format validation
- * - Username format validation
- * - Photo upload with preview
- * - Error handling and display
- * - Loading states during submission
- * 
- * Validation Rules:
- * - Username: 3-20 characters, alphanumeric and underscores only
- * - Email: Valid email format
- * - Password: 8-50 characters
- * - Confirm Password: Must match password exactly
- * - Photo: Optional, must be valid image file
- */
 export const Register: React.FC<RegisterProps> = ({
   onRegisterSuccess,
   onSwitchToLogin,
@@ -56,10 +23,7 @@ export const Register: React.FC<RegisterProps> = ({
 }) => {
   const { register, error: authError, clearError } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  /**
-   * Form field configuration for registration
-   * Defines all the fields needed for user registration
-   */
+  
   const registerFields: AuthFormField[] = [
     {
       name: 'username',
@@ -109,22 +73,11 @@ export const Register: React.FC<RegisterProps> = ({
     }
   ];
 
-  /**
-   * Handles form submission for user registration
-   * 
-   * This function is called when:
-   * 1. User fills out the registration form
-   * 2. All validation passes
-   * 3. User clicks "Register" button
-   * 
-   * @param formData - Form data object with all field values
-   */
   const handleRegisterSubmit = async (formData: Record<string, string>) => {
     try {
       setIsSubmitting(true);
       clearError();
 
-      // Create RegisterData object from form data
       const registerData: RegisterData = {
         username: formData.username || '',
         email: formData.email || '',
@@ -135,19 +88,13 @@ export const Register: React.FC<RegisterProps> = ({
 
       console.log('Registration data:', registerData);
       
-      // Call the API to register
       const success = await register(registerData);
       
       if (success) {
-        // Registration successful - the AuthContext will handle the state update
-        // Call the parent callback if provided
         if (onRegisterSuccess) {
-          // Get the current user from context (this will be updated by the context)
-          // For now, we'll call the callback without user data since context handles it
-          onRegisterSuccess({} as User); // This is a placeholder
+          onRegisterSuccess({} as User);
         }
       } else {
-        // Registration failed - error is already set in context
         if (onRegisterError && authError) {
           onRegisterError(authError);
         }
@@ -163,21 +110,12 @@ export const Register: React.FC<RegisterProps> = ({
     }
   };
 
-  /**
-   * Handles switching to login form
-   * Called when user clicks "Already have an account? Login"
-   */
-  const handleSwitchToLogin = () => {
-    onSwitchToLogin();
-  };
-
   return (
     <div style={styles.container}>
       <div style={styles.formContainer}>
         <h2 style={styles.title}>Create Account</h2>
         <p style={styles.subtitle}>Join us today! Fill in your details to get started.</p>
         
-        {/* Registration form using the Form component */}
         <Form
           title=""
           fields={registerFields}
@@ -186,14 +124,14 @@ export const Register: React.FC<RegisterProps> = ({
           showContainer={false}
         />
         
-        {/* Show error message if any */}
+        {}
         {authError && (
           <div style={styles.errorContainer}>
             <p style={styles.errorText}>{authError}</p>
           </div>
         )}
         
-        {/* Switch to login link */}
+        {}
         <div style={styles.switchContainer}>
           <p style={styles.switchText}>
             Already have an account?{' '}
@@ -210,9 +148,6 @@ export const Register: React.FC<RegisterProps> = ({
   );
 };
 
-/**
- * Styles object for the Register component
- */
 const styles = {
   container: {
     padding: '20px',

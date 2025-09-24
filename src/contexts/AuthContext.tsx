@@ -1,17 +1,9 @@
-/**
- * Authentication Context
- * 
- * This module provides React context for managing authentication state
- * across the entire application.
- */
+
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import type { User, LoginData, RegisterData, AuthResponse } from '../types/User';
 import { api } from '../services/api';
 
-/**
- * Authentication Context Type
- */
 interface AuthContextType {
   // State
   user: User | null;
@@ -27,22 +19,12 @@ interface AuthContextType {
   checkAuth: () => Promise<void>;
 }
 
-/**
- * Authentication Context
- */
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-/**
- * Authentication Provider Props
- */
 interface AuthProviderProps {
   children: ReactNode;
 }
 
-/**
- * Authentication Provider Component
- * Provides authentication context to all child components
- */
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // State
   const [user, setUser] = useState<User | null>(null);
@@ -52,24 +34,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Computed state
   const isAuthenticated = user !== null;
 
-  /**
-   * Clear error message
-   */
   const clearError = () => {
     setError(null);
   };
 
-  /**
-   * Set error message
-   */
   const setErrorMessage = (message: string) => {
     setError(message);
     setIsLoading(false);
   };
 
-  /**
-   * Handle successful authentication
-   */
   const handleAuthSuccess = (authResponse: AuthResponse) => {
     if (authResponse.user) {
       setUser(authResponse.user);
@@ -78,17 +51,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setIsLoading(false);
   };
 
-  /**
-   * Handle authentication failure
-   */
   const handleAuthFailure = (errorMessage: string) => {
     setUser(null);
     setErrorMessage(errorMessage);
   };
 
-  /**
-   * Login user
-   */
   const login = async (loginData: LoginData): Promise<boolean> => {
     try {
       setIsLoading(true);
@@ -119,9 +86,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  /**
-   * Register user
-   */
   const register = async (registerData: RegisterData): Promise<boolean> => {
     try {
       setIsLoading(true);
@@ -152,9 +116,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  /**
-   * Logout user
-   */
   const logout = async (): Promise<void> => {
     try {
       setIsLoading(true);
@@ -173,9 +134,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  /**
-   * Check authentication status
-   */
   const checkAuth = async (): Promise<void> => {
     try {
       setIsLoading(true);
@@ -204,16 +162,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  /**
-   * Initialize authentication on mount
-   */
   useEffect(() => {
     checkAuth();
   }, []);
 
-  /**
-   * Context value
-   */
   const contextValue: AuthContextType = {
     user,
     isAuthenticated,
@@ -233,9 +185,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   );
 };
 
-/**
- * Hook to use authentication context
- */
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (context === undefined) {

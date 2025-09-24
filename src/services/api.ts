@@ -1,9 +1,4 @@
-/**
- * API Service Layer
- * 
- * This module provides functions to communicate with the backend API.
- * It handles all HTTP requests to the authentication endpoints.
- */
+
 
 import type { User, LoginData, RegisterData, AuthResponse } from '../types/User';
 
@@ -17,30 +12,17 @@ const API_ENDPOINTS = {
   health: `${API_BASE_URL}/health`
 };
 
-/**
- * API Client Class
- * Handles all API communication with the backend
- */
 export class ApiClient {
   private token: string | null = null;
 
-  /**
-   * Set authentication token
-   */
   setToken(token: string | null) {
     this.token = token;
   }
 
-  /**
-   * Get authentication token
-   */
   getToken(): string | null {
     return this.token;
   }
 
-  /**
-   * Get headers for API requests
-   */
   private getHeaders(): HeadersInit {
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
@@ -53,9 +35,6 @@ export class ApiClient {
     return headers;
   }
 
-  /**
-   * Make HTTP request with error handling
-   */
   private async makeRequest<T>(
     url: string,
     options: RequestInit = {}
@@ -88,9 +67,6 @@ export class ApiClient {
     }
   }
 
-  /**
-   * Register a new user
-   */
   async register(registerData: RegisterData): Promise<{ data: AuthResponse | null; error: string | null }> {
     console.log('API: Registering user:', registerData);
     
@@ -107,9 +83,6 @@ export class ApiClient {
     return result;
   }
 
-  /**
-   * Login user
-   */
   async login(loginData: LoginData): Promise<{ data: AuthResponse | null; error: string | null }> {
     console.log('API: Logging in user:', loginData);
     
@@ -126,9 +99,6 @@ export class ApiClient {
     return result;
   }
 
-  /**
-   * Logout user
-   */
   async logout(): Promise<{ data: AuthResponse | null; error: string | null }> {
     console.log('API: Logging out user');
     
@@ -142,9 +112,6 @@ export class ApiClient {
     return result;
   }
 
-  /**
-   * Get current user info
-   */
   async getCurrentUser(): Promise<{ data: AuthResponse | null; error: string | null }> {
     console.log('API: Getting current user');
     
@@ -153,9 +120,6 @@ export class ApiClient {
     });
   }
 
-  /**
-   * Check API health
-   */
   async checkHealth(): Promise<{ data: any | null; error: string | null }> {
     console.log('API: Checking health');
     
@@ -168,42 +132,19 @@ export class ApiClient {
 // Create a singleton instance
 export const apiClient = new ApiClient();
 
-/**
- * Convenience functions for easier usage
- */
 export const api = {
-  /**
-   * Register a new user
-   */
+  
   register: (registerData: RegisterData) => apiClient.register(registerData),
 
-  /**
-   * Login user
-   */
   login: (loginData: LoginData) => apiClient.login(loginData),
 
-  /**
-   * Logout user
-   */
   logout: () => apiClient.logout(),
 
-  /**
-   * Get current user info
-   */
   getCurrentUser: () => apiClient.getCurrentUser(),
 
-  /**
-   * Check API health
-   */
   checkHealth: () => apiClient.checkHealth(),
 
-  /**
-   * Set authentication token
-   */
   setToken: (token: string | null) => apiClient.setToken(token),
 
-  /**
-   * Get authentication token
-   */
   getToken: () => apiClient.getToken()
 };

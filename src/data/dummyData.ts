@@ -1,22 +1,5 @@
 import type { Person } from '../types/Person';
 
-/**
- * Dummy Data for the Person Information Application
- * 
- * This file contains sample data that is loaded when the application starts.
- * It provides immediate visual feedback and demonstrates the application's
- * functionality without requiring users to add data first.
- * 
- * The data is localized for Uganda:
- * - Addresses are in Kampala
- * - Phone numbers use Ugandan format (+256)
- * - Photos are high-quality placeholder images from Unsplash
- */
-
-/**
- * Array of sample Person objects
- * This data is imported and used as initial state in App.tsx
- */
 export const dummyPeople: Person[] = [
   {
     id: 1, // Unique identifier
