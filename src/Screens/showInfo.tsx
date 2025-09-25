@@ -1,24 +1,104 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import type { Person } from '../types/Person';
+import { getAllPeople } from '../services/peopleApi';
+import type { PeopleApiResponse } from '../types/ApiResponse';
 
 interface ShowInfoProps {
-  
   people: Person[];
+  onPeopleUpdate?: (people: Person[]) => void;
 }
 
-export const ShowInfo: React.FC<ShowInfoProps> = ({ people }) => {
+export const ShowInfo: React.FC<ShowInfoProps> = ({ people, onPeopleUpdate }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [lastRefresh, setLastRefresh] = useState<Date | null>(null);
+
+  // Fetch people data from API
+  const fetchPeople = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      
+      const response: PeopleApiResponse = await getAllPeople();
+      
+      if (response.success && response.data) {
+        if (onPeopleUpdate) {
+          onPeopleUpdate(response.data);
+        }
+        setLastRefresh(new Date());
+      } else {
+        throw new Error(response.message || 'Failed to fetch people');
+      }
+    } catch (err: any) {
+      console.error('Error fetching people:', err);
+      setError(err.message || 'Failed to fetch people data');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Load people data on component mount
+  useEffect(() => {
+    fetchPeople();
+  }, []);
+
+  // Refresh data every 30 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchPeople();
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, []);
   return (
     <div style={styles.container}>
       <div style={styles.contentContainer}>
         {}
         <div style={styles.pageHeader}>
           <h2 style={styles.title}>Person Information</h2>
-          {people.length > 0 && (
-            <div style={styles.countBadge}>
-              {people.length} {people.length === 1 ? 'Person' : 'People'}
-            </div>
-          )}
+          <div style={styles.headerActions}>
+            {people.length > 0 && (
+              <div style={styles.countBadge}>
+                {people.length} {people.length === 1 ? 'Person' : 'People'}
+              </div>
+            )}
+            <button
+              onClick={fetchPeople}
+              disabled={isLoading}
+              style={{
+                ...styles.refreshButton,
+                ...(isLoading ? styles.refreshButtonLoading : {})
+              }}
+            >
+              {isLoading ? '⏳' : '🔄'} Refresh
+            </button>
+          </div>
         </div>
+        
+        {/* Error State */}
+        {error && (
+          <div style={styles.errorContainer}>
+            <div style={styles.errorIcon}>⚠️</div>
+            <div style={styles.errorContent}>
+              <h3 style={styles.errorTitle}>Error Loading Data</h3>
+              <p style={styles.errorMessage}>{error}</p>
+              <button
+                onClick={fetchPeople}
+                style={styles.retryButton}
+              >
+                Try Again
+              </button>
+            </div>
+          </div>
+        )}
+        
+        {/* Loading State */}
+        {isLoading && !error && (
+          <div style={styles.loadingContainer}>
+            <div style={styles.loadingSpinner}></div>
+            <p style={styles.loadingText}>Loading people data...</p>
+          </div>
+        )}
         
         {}
         {people.length === 0 ? (
@@ -105,6 +185,12 @@ const styles = {
     marginBottom: '30px', // Space below header
     flexWrap: 'wrap' as const, // Wrap on small screens
     gap: '15px', // Gap between elements
+  },
+
+  headerActions: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '15px',
   },
 
   title: {
@@ -241,5 +327,102 @@ const styles = {
     fontSize: '16px',
     color: '#2c3e50', // Dark blue-gray color
     wordBreak: 'break-word' as const, // Break long words if needed
+  },
+
+  // New styles for API integration
+  refreshButton: {
+    padding: '8px 16px',
+    fontSize: '14px',
+    fontWeight: '600',
+    color: '#667eea',
+    backgroundColor: 'transparent',
+    border: '2px solid #667eea',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
+    fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+  },
+
+  refreshButtonLoading: {
+    cursor: 'not-allowed',
+    opacity: 0.6,
+  },
+
+  errorContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '20px',
+    padding: '20px',
+    backgroundColor: '#fef2f2',
+    border: '2px solid #fecaca',
+    borderRadius: '12px',
+    marginBottom: '30px',
+  },
+
+  errorIcon: {
+    fontSize: '24px',
+    flexShrink: 0,
+  },
+
+  errorContent: {
+    flex: 1,
+  },
+
+  errorTitle: {
+    fontSize: '18px',
+    fontWeight: '700',
+    color: '#dc2626',
+    margin: '0 0 8px 0',
+    fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+  },
+
+  errorMessage: {
+    fontSize: '14px',
+    color: '#dc2626',
+    margin: '0 0 12px 0',
+    lineHeight: '1.5',
+    fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+  },
+
+  retryButton: {
+    padding: '8px 16px',
+    fontSize: '14px',
+    fontWeight: '600',
+    color: 'white',
+    backgroundColor: '#dc2626',
+    border: 'none',
+    borderRadius: '6px',
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
+    fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+  },
+
+  loadingContainer: {
+    display: 'flex',
+    flexDirection: 'column' as const,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '60px 20px',
+    backgroundColor: 'white',
+    borderRadius: '12px',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+    marginBottom: '30px',
+  },
+
+  loadingSpinner: {
+    width: '40px',
+    height: '40px',
+    border: '4px solid #e0e0e0',
+    borderTop: '4px solid #667eea',
+    borderRadius: '50%',
+    animation: 'spin 1s linear infinite',
+    marginBottom: '20px',
+  },
+
+  loadingText: {
+    fontSize: '16px',
+    color: '#6c757d',
+    margin: 0,
+    fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   },
 };

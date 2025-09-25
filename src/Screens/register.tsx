@@ -160,7 +160,7 @@ const styles = {
     boxSizing: 'border-box' as const
   },
   formContainer: {
-    maxWidth: '500px',
+    maxWidth: '650px',
     width: '100%',
     backgroundColor: 'white',
     padding: '40px',

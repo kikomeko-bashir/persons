@@ -5,10 +5,10 @@ import type { User, LoginData, RegisterData, AuthResponse } from '../types/User'
 // API Configuration
 const API_BASE_URL = 'http://localhost:3002';
 const API_ENDPOINTS = {
-  register: `${API_BASE_URL}/auth/register`,
-  login: `${API_BASE_URL}/auth/login`,
-  logout: `${API_BASE_URL}/auth/logout`,
-  me: `${API_BASE_URL}/auth/me`,
+  register: `${API_BASE_URL}/api/auth/register`,
+  login: `${API_BASE_URL}/api/auth/login`,
+  logout: `${API_BASE_URL}/api/auth/logout`,
+  me: `${API_BASE_URL}/api/auth/me`,
   health: `${API_BASE_URL}/health`
 };
 

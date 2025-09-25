@@ -22,6 +22,10 @@ function AppContent() {
     setPeople(prev => [...prev, newPerson]);
   };
 
+  const handlePeopleUpdate = (updatedPeople: Person[]) => {
+    setPeople(updatedPeople);
+  };
+
   const handleScreenChange = (screen: 'enter' | 'show') => {
     setCurrentScreen(screen);
   };
@@ -102,7 +106,7 @@ function AppContent() {
           <EnterInfo onPersonAdd={handlePersonAdd} />
         )}
         {currentScreen === 'show' && (
-          <ShowInfo people={people} />
+          <ShowInfo people={people} onPeopleUpdate={handlePeopleUpdate} />
         )}
       </div>
     </div>
